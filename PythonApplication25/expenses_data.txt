@@ -1,6 +1,0 @@
-Shopping at Kaufland;Groceries;2023-02-01;650
-Gas money;Transpotation;2023-02-02;500
-Buying boozes;Entertainment;2023-02-02;400
-Paying rent for December;Housing and Utilities;2023-02-03;4000
-Wisdom teeth removal;Health care;2023-02-05;1300
-Eating at McDonald;Entertainment;2023-02-09;100

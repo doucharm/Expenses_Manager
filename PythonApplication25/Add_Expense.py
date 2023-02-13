@@ -2,9 +2,10 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 from tkcalendar import Calendar
+import sqlalchemy as sql
 import class1
 
-def add_expenses(main_menu,options_list):
+def add_expenses(main_menu,options_list,engine):
     "Adding a new entry to data base, entry have 4 attribute name,catagory,date and money, of which only money are strictly required"
     def save_payment():
         i1 = input_payment.get("1.0","end-1c")
@@ -16,10 +17,9 @@ def add_expenses(main_menu,options_list):
             add_expense.destroy()
         else:
             pay=class1.Payment(i1,i2,i3,i4)
-            file_handler=open("expenses_data.txt",mode='a')
-            to_file=i1+';'+i2+';'+i3+';'+i4
-            file_handler.write(to_file)
-            file_handler.write('\n')
+            with engine.connect() as conn:
+                conn.execute(sql.text("INSERT INTO some_table (name,cata,date_num,money_num) VALUES (:name,:cata,:date_num,:money_num)"),[{"name": i1, "cata": i2, "date_num": i3, "money_num": i4}],)
+                conn.commit() #insert data into base and close window.
             add_expense.destroy()
 
     add_expense=Toplevel(main_menu)
@@ -52,13 +52,11 @@ def add_expenses(main_menu,options_list):
         cal.pack(fill="both", expand=True)
         ttk.Button(top, text="Select_date", command=print_sel).pack()
     Button(add_expense, text = "Get Date",command = Get_Date).grid(row=3, column=3)
-    #date sellection: return raw string 
+    #date sellection screen, open a seperate calendar for easy visualization
     Label(add_expense,text="Money: ", width=15).grid(row=4, column=0)
     input_money = Text(add_expense, height = 1,width = 10,bg = "light blue")
     input_money.grid(row=4,column=2)
-
-
-    Button(add_expense,text="Save this payment", command=save_payment).grid(row=6,column=2)
+    Button(add_expense,text="Save this payment", command=save_payment).grid(row=6,column=2) # save entry to database
 
 if __name__=="__main__":
     print("Module Show_Data ")
